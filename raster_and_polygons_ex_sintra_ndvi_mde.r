@@ -45,7 +45,7 @@ polygon(limite.ap,border="red")
 points(amostra,col="yellow",cex=.5)
 text(x=mean(xy[1:2]),y=xy[4],"transectos",col="yellow",pos=1)
 
-if (export) graphics.off()
+if (export) graphics.off() 
 
 # extrair valores das células sobre o transecto
 y<-extract(ndvi.etrs,amostra)

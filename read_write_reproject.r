@@ -1,4 +1,4 @@
-#############################################################################################
+########################################################################################### # # # 
 #
 # Sessão 4: 5 de Fevereiro de 2015
 #
@@ -18,9 +18,9 @@ export<-FALSE
 
 # pasta de trabalho
 wd<-"Y:\\Aulas\\CURSOS_R\\sigs_com_R\\dados_aulas"
-aulas<-"Y:\\Aulas\\sigs_com_R"
+aulas<-"Y:\\Aulas\\sigs_com_R"    
 setwd(wd)
-list.files(path=wd)
+list.files(path=wd) #   
 # LER COM RASTER
 # ler geotiff com raster: devolve raster object
 # raster atribui CRS ao objecto

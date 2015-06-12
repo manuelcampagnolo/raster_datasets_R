@@ -1,4 +1,4 @@
-# extrair valores das células para o vector v
+# extrair valores das células para o vector v # # # 
 v<-values(pan)
 
 if (export)  png(paste(aulas,"val.vs.intensidade.png",sep="\\"), width=800, height=800, res=120)

@@ -14,13 +14,14 @@ library(rgeos)
 #library("gdalUtils") # função remove_file_extension
 
 library(grDevices)
-export<-FALSE
+export<-TRUE #FALSE
 
 # pasta de trabalho
 wd<-"Y:\\Aulas\\CURSOS_R\\sigs_com_R\\dados_aulas"
-aulas<-"Y:\\Aulas\\sigs_com_R"    
+aulas<-"Y:\\Aulas\\CURSOS_R\\sigs_com_R"    
 setwd(wd)
-list.files(path=wd) #   
+list.files(path=wd)
+list.files(path=aulas)   
 # LER COM RASTER
 # ler geotiff com raster: devolve raster object
 # raster atribui CRS ao objecto
@@ -31,8 +32,24 @@ print(pan@crs)
 cores<-gray(seq(0,1,length.out=100))
 plot(pan,col=cores)
 if (export)  png(paste(aulas,"imagem_pan_tons_cinzento_legenda_horizontal.png",sep="\\"), width=800, height=800, res=120)
+par(mar=rep(2,4))
 plot(pan,  xaxt="n", yaxt="n", box=FALSE, axes=FALSE, col=cores,horizontal=TRUE)
 if (export) graphics.off()
+
+# histograma e alteração de contraste
+if (export)  png(paste(aulas,"val_vs_intensidade.png",sep="\\"), width=800, height=800, res=120)
+par(mar=rep(2,4))
+v<-values(pan) # vector numérico
+out<-hist(v,main="valores vs intensidade")
+fqs<-out$counts # frequências absolutas das classes
+# representar a transformação linear em intensidade
+lines(x=range(v),y=range(fqs),col="blue")
+# representar os valores de intensidade
+axis(4,at=seq(min(fqs),max(fqs),length.out=5),labels=seq(0,1,length.out=5))
+mtext("intensidade", side=4,line=-1.5,col="blue")
+if (export) graphics.off()
+
+range(v)
 
 # re-projectar
 igeoe<- "+proj=tmerc +lat_0=39.66666666666666  +towgs84=-304.046,-60.576,103.64,0,0,0,0 +lon_0=1 +k=1 +x_0=200000 +y_0=300000 +ellps=intl  +pm=lisbon +units=m" # Coordenadas ``militares''
@@ -75,11 +92,14 @@ text(x=mean(xy[1:2]),y=xy[4],"método das grelhas",col="yellow",pos=1)
 if (export) graphics.off()
 
 # exercicio (a) determinar a gama lat/long correspondente a pan
+if (export)  png(paste(aulas,"montargil_latlong.png",sep="\\"), width=800, height=500, res=120)
 wgs84<-"+proj=longlat +ellps=WGS84 +datum=WGS84"
 w <- projectRaster(pan, crs=wgs84)
+par(mar=rep(1.5,4))
 plot(w, xaxt="n", yaxt="n", box=FALSE, axes=FALSE, legend=FALSE, col=cores,zlim=c(0,25000))
 xy<-as.vector(w@extent) 
 text(xy[c(1,2,1,1)],xy[c(3,3,3,4)],round(xy,4),pos=c(1,1,2,2),xpd=TRUE)
+if (export) graphics.off()
 
 # exercicio (b) determinar a localização (lat/long) do parede da barragem de Montargil
 zoom(w, new=FALSE, xaxt="n", yaxt="n", box=FALSE, axes=FALSE, legend=FALSE, col=cores)

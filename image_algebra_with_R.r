@@ -1,4 +1,5 @@
 # algebra de imagens
+# feito no RSutio, projecto raster_datasets_R
 ndvi <- (b$banda4 - b$banda3)/(b$banda4 + b$banda3)
 
 ncell(ndvi[is.na(ndvi)])/ncell(ndvi) #ou length 

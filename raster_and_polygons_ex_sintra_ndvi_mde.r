@@ -18,7 +18,7 @@ ndvi.etrs<-projectRaster(from=ndvi,to=vazio)
 # construir imagens para verificar
 cores<-gray(seq(0,1,length.out=100))
 if (export)  png(paste(aulas,"ap_sintra_cascais_ndvi_mde_transectos.png",sep="\\"), width=800, height=500, res=120)
-par(mfrow=c(1,3))
+par(mfrow=c(1,2))
 plot(mde.etrs,  xaxt="n", yaxt="n", box=FALSE, axes=FALSE, col=cores,legend=FALSE)
 polygon(limite.ap,border="red")
 xy<-as.vector(mde.etrs@extent) 
@@ -31,29 +31,22 @@ xy<-as.vector(ndvi.etrs@extent)
 text(xy[c(1,2,1,1)],xy[c(3,3,3,4)],round(xy,0),pos=c(1,1,2,2),xpd=TRUE,cex=0.8)
 text(x=mean(xy[1:2]),y=xy[4],"ndvi.etrs",col="black",pos=1)
 
-# extrair células num transecto dentro da AP Sintra-Cascais
-xy0<-apply(limite.ap,2,mean) # centroide da AP
-cp1<-eigen(cov(limite.ap))$vectors[,1] # 1a componente principal
-cp2<-eigen(cov(limite.ap))$vectors[,2] # 1a componente principal
-xs<-unique(coordinates(mde.etrs)[,1]) # coord x das células
-amostra<-cbind(xs, xy0[2]+cp1[2]/cp1[1]*(xs-xy0[1])) # coord x e y 
-amostra<-rbind(amostra, cbind(xs, xy0[2]+cp2[2]/cp2[1]*(xs-xy0[1])) )
-
-# verificar localização do transecto:
-plot(mde.etrs,  xaxt="n", yaxt="n", box=FALSE, axes=FALSE, col=cores,legend=FALSE)
-polygon(limite.ap,border="red")
-points(amostra,col="yellow",cex=.5)
-text(x=mean(xy[1:2]),y=xy[4],"transectos",col="yellow",pos=1)
-
+# definir uma amostra sobre a AP
+# usa package sp e função spsample
+amostra2D<-coordinates(spsample(SpatialPoints(limite.ap),n=2000,type="random"))
+# seleccionar apenas os pontos que estão no interior de limite.ap
+amostra2D.ap<-amostra2D[point.in.polygon(point.x=amostra2D[,1], point.y=amostra2D[,2],pol.x=limite.ap[,1],pol.y = limite.ap[,2])==1,]
+# colocar pontos no gráfico
+points(amostra2D.ap,col="red")
 if (export) graphics.off() 
 
 # extrair valores das células sobre o transecto
-y<-extract(ndvi.etrs,amostra)
-x<-extract(mde.etrs,amostra)
-
+y<-extract(ndvi.etrs,amostra2D.ap)
+x<-extract(mde.etrs,amostra2D.ap)
 
 # analisar a relação entre ndvi e elevação
 if (export)  png(paste(aulas,"ap_sintra_cascais_ndvi_vs_mde_ajustamento.png",sep="\\"), width=800, height=800, res=120)
+par(mfrow=c(1,1))
 plot(y~x,xlab="elevação (m)",ylab="ndvi",main="AP Sintra-Cascais",cex.lab=1.3)
 # ajustar curva
 xx<-log(x[x>0]) #1/x[x>0]

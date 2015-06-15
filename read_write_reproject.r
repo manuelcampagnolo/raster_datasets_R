@@ -14,7 +14,7 @@ library(rgeos)
 #library("gdalUtils") # função remove_file_extension
 
 library(grDevices)
-export<-TRUE #FALSE
+export<-FALSE
 
 # pasta de trabalho
 wd<-"Y:\\Aulas\\CURSOS_R\\sigs_com_R\\dados_aulas"
@@ -74,8 +74,12 @@ if (export) graphics.off()
 
 # nadgrid
 #Colocar ptLX_e89.gsb na pasta dada por system.file("proj", package = "rgdal")
-igeoe.grid <- CRS("+proj=tmerc +lat_0=39.66666666666666  +nadgrids=ptLX_e89.gsb +lon_0=1 +k=1 +x_0=200000 +y_0=300000 +ellps=intl  +pm=lisbon +units=m")
-m.grid <- projectRaster(pan, crs=igeoe.grid)
+if ("ptLX_e89.gsb" %in% list.files(system.file("proj", package = "rgdal")))
+{
+  igeoe.grid <- CRS("+proj=tmerc +lat_0=39.66666666666666  +nadgrids=ptLX_e89.gsb +lon_0=1 +k=1 +x_0=200000 +y_0=300000 +ellps=intl  +pm=lisbon +units=m")
+  m.grid <- projectRaster(pan, crs=igeoe.grid)
+}
+
 # dados transformados (coordenadas militares) 3 coefs. 
 if (export)  png(paste(aulas,"imagem_pan_bursa_wolf_vs_nadgrid.png",sep="\\"), width=800, height=500, res=120)
 par(mfrow=c(1,2))

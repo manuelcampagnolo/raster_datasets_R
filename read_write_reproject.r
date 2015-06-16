@@ -73,7 +73,7 @@ text(x=mean(xy[1:2]),y=xy[4],"Coord. Militares",col="yellow",pos=1)
 if (export) graphics.off()
 
 # nadgrid
-#Colocar ptLX_e89.gsb na pasta dada por system.file("proj", package = "rgdal")
+# Colocar ptLX_e89.gsb na pasta dada por system.file("proj", package = "rgdal") antes de carregar rgdal
 if ("ptLX_e89.gsb" %in% list.files(system.file("proj", package = "rgdal")))
 {
   igeoe.grid <- CRS("+proj=tmerc +lat_0=39.66666666666666  +nadgrids=ptLX_e89.gsb +lon_0=1 +k=1 +x_0=200000 +y_0=300000 +ellps=intl  +pm=lisbon +units=m")

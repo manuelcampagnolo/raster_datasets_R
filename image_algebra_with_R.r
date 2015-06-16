@@ -19,4 +19,4 @@ cellStats(b,"mean") # devolve um vector
 
 # operações sobre vários objectos RasterLayer
 median(b) #dá erro
-b.mediana<-overlay(b,fun=median,rm.na=TRUE) # lento, mas funciona
+b.mediana<-overlay(b,fun=median) # lento, mas funciona

@@ -1,4 +1,5 @@
 # dados alta resolução google maps para a mesma região
+#install.packages("dismo")
 library(dismo)
 library(proj4)
 library(sp)
@@ -15,7 +16,7 @@ landsat.etrs<-projectRaster(landsat,crs=etrs)
 # sobrepor as duas imagens usando ptransparência 
 if (export)  png(paste(aulas,"ribatejo_rgb_432_sobre_google.png",sep="\\"), width=800, height=600, res=120)
 par(mfrow=c(1,1))
-plotRGB(gm.etrs,r=3,g=2,b=1,stretch="lin") #RGB
+plotRGB(gm.etrs,r=3,g=2,b=1,stretch="lin") 
 # composição colorida Landsat RGB=432
 plotRGB(landsat.etrs,r=4,g=3,b=2,stretch="lin",ext=gm.etrs@extent,alpha=100,add=TRUE) #RGB
 if (export) graphics.off()
@@ -23,4 +24,4 @@ if (export) graphics.off()
 # nova figura
 plotRGB(gm.etrs,r=3,g=2,b=1,stretch="lin") #RGB
 # composição colorida Landsat RGB=742
-plotRGB(landsat.etrs,r=7,g=4,b=2,stretch="lin",ext=gm.etrs@extent,alpha=100,add=TRUE) #RGB
+plotRGB(landsat.etrs,r=6,g=4,b=2,stretch="lin",ext=gm.etrs@extent,alpha=100,add=TRUE) #RGB
